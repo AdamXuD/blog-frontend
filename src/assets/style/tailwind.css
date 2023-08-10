@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-app: #fafafa;
+    --color-primary: #303133;
+    --color-regular: #606266;
+    --color-secondary: #909399;
+    --color-dark-app: #181818;
+    --color-dark-primary: #d1d5db;
+    --color-dark-regular: #99999a;
+    --color-dark-secondary: #68686d;
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-black-mask: #000000d0;
+    --color-white-mask: #ffffffd0;
+    --color-transparent: transparent;
+    --color-element-primary: #409eff;
+    --color-element-success: #67c23a;
+    --color-element-warning: #e6a23c;
+    --color-element-danger: #f56c6c;
+  }
+}
+
+@layer utilities {
+  .scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scroll::-webkit-scrollbar-thumb,
+  .scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  .scroll::-webkit-scrollbar-thumb {
+    background-color: #0004;
+  }
+
+  .scroll::-webkit-scrollbar-track {
+    background-color: #eee;
+  }
+
+  .dark .scroll::-webkit-scrollbar-thumb {
+    background-color: #fff4;
+  }
+
+  .dark .scroll::-webkit-scrollbar-track {
+    background-color: #000;
+  }
+}
