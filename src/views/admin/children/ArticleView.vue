@@ -29,13 +29,26 @@ const onDeleteArticleBtnClicked = (articles: ArticleBrief[]) => {
     .then(() => {
       ElMessage.info("正在删除文章...");
 
-      articles.forEach((article) => {
-        deleteArticle(article.uuid).then(() => {
-          articleStore.deleteArticle(article.uuid);
-          ElMessage.success(`文章${article.title}删除成功。`);
+      const uuids = articles.map((article) => article.uuid);
+      deleteArticle(uuids)
+        .then(() => {
+          uuids.forEach((uuid) => articleStore.deleteArticle(uuid));
+          ElMessage.success(`文章删除成功。`);
+        })
+        .catch(() => {
+          ElMessage.error(`文章删除失败。`);
         });
-      });
 
+      const attachmentFilenames = articles.reduce((acc, article) => {
+        return acc.concat(
+          attachmentStore
+            .selectAttachmentByArticleUUID(article.uuid)
+            .map((attachment) => attachment.filename)
+        );
+      }, [] as string[]);
+      if (attachmentFilenames.length === 0) {
+        return;
+      }
       ElMessageBox.confirm("是否删除文章附件？", "提示", {
         confirmButtonText: "删除",
         cancelButtonText: "取消",
@@ -44,19 +57,15 @@ const onDeleteArticleBtnClicked = (articles: ArticleBrief[]) => {
         .then(() => {
           ElMessage.info("正在删除文章附件...");
 
-          articles
-            .reduce((acc, article) => {
-              return acc.concat(
-                attachmentStore
-                  .selectAttachmentByArticleUUID(article.uuid)
-                  .map((attachment) => attachment.filename)
+          deleteAttachment(attachmentFilenames)
+            .then(() => {
+              attachmentFilenames.forEach((filename) =>
+                attachmentStore.deleteAttachment(filename)
               );
-            }, [] as string[])
-            .forEach((filename) => {
-              deleteAttachment(filename).then(() => {
-                attachmentStore.deleteAttachment(filename);
-                ElMessage.success(`附件${filename}删除成功。`);
-              });
+              ElMessage.success(`附件删除成功。`);
+            })
+            .catch(() => {
+              ElMessage.error(`附件删除失败。`);
             });
         })
         .catch(() => {});

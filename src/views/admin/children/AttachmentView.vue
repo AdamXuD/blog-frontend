@@ -60,12 +60,19 @@ const onDeleteAttachmentBtnClicked = (attachments: Attachment[]) => {
     .then(() => {
       ElMessage.info("正在删除附件...");
 
-      attachments.forEach((attachment) => {
-        deleteAttachment(attachment.filename).then(() => {
-          attachmentStore.deleteAttachment(attachment.filename);
-          ElMessage.success(`附件${attachment.filename}删除成功。`);
+      const attachmentFilenames = attachments.map(
+        (attachment) => attachment.filename
+      );
+      deleteAttachment(attachmentFilenames)
+        .then(() => {
+          attachmentFilenames.forEach((filename) =>
+            attachmentStore.deleteAttachment(filename)
+          );
+          ElMessage.success(`附件删除成功。`);
+        })
+        .catch(() => {
+          ElMessage.error(`附件删除失败。`);
         });
-      });
     })
     .catch(() => {});
 };

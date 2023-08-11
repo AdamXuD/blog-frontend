@@ -53,7 +53,13 @@ const fileHttpRequest = (options: UploadRequestOptions) => {
     articleUuid.value || "",
     options.file.name,
     options.file
-  );
+  )
+    .then(() => {
+      ElMessage.success(`文件${options.file.name}上传完成。`);
+    })
+    .catch(() => {
+      ElMessage.error(`文件${options.file.name}上传失败。`);
+    });
 };
 
 const onFileUploadSuccess = (

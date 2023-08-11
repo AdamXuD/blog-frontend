@@ -86,3 +86,9 @@ export function isElemInView(elem: HTMLElement) {
   const { top, right, bottom, left } = elem.getBoundingClientRect();
   return top >= 0 && left >= 0 && right <= viewWidth && bottom <= viewHeight;
 }
+
+export function fetchWrapper(url: string, options?: RequestInit) {
+  return fetch(url, options).then((res) =>
+    res.ok ? res : Promise.reject(res)
+  );
+}

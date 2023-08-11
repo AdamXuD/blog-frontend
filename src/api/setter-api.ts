@@ -1,113 +1,93 @@
 import { useStateStore } from "@/stores/title";
 import type { Article, Site } from "@/types";
+import { fetchWrapper } from "@/utils";
 
 const apiPrefix: string = import.meta.env.VITE_BLOG_API_PREFIX;
 
-export function putAvatar(pngFile: File) {
+function request(url: string, options?: RequestInit) {
   const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/avatar`, {
-    method: "PUT",
-    body: pngFile,
+  return fetchWrapper(url, {
+    ...options,
     headers: {
+      ...options?.headers,
       Authorization: `Bearer ${token}`,
     },
   });
 }
 
+export function putAvatar(pngFile: File) {
+  return request(`${apiPrefix}api/admin/avatar`, {
+    method: "PUT",
+    body: pngFile,
+  });
+}
+
 export function putSite(data: Site) {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/site`, {
+  return request(`${apiPrefix}api/admin/site`, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 }
 
 export function postArticle(data: Article) {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/article`, {
+  return request(`${apiPrefix}api/admin/article`, {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 }
 
 export function putArticle(data: Article) {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/article`, {
+  return request(`${apiPrefix}api/admin/article`, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 }
 
 export function putArticleStage(data: Article) {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/article/stage`, {
+  return request(`${apiPrefix}api/admin/article/stage`, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 }
 
-export function deleteArticle(uuid: string) {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/article`, {
+export function deleteArticle(uuids: string[]) {
+  return request(`${apiPrefix}api/admin/article`, {
     method: "DELETE",
-    body: JSON.stringify({ uuid }),
+    body: JSON.stringify({ uuids }),
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 }
 
 export function postAttachment(uuid: string, filename: string, file: File) {
-  const token = useStateStore().token;
-  return fetch(
+  return request(
     `${apiPrefix}api/admin/attachment?filename=${filename}&uuid=${uuid}`,
     {
       method: "POST",
       body: file,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     }
   );
 }
 
-export function deleteAttachment(filename: string) {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/attachment`, {
+export function deleteAttachment(filenames: string[]) {
+  return request(`${apiPrefix}api/admin/attachment`, {
     method: "DELETE",
-    body: JSON.stringify({ filename }),
+    body: JSON.stringify({ filenames }),
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-export function putAttachment(filename: string, uuid: string) {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/attachment`, {
-    method: "PUT",
-    body: JSON.stringify({ filename, uuid }),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 }
@@ -118,33 +98,23 @@ export function postLogin(loginForm: {
 }): Promise<{
   token: string;
 }> {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/public/login`, {
+  return request(`${apiPrefix}api/public/login`, {
     method: "POST",
     body: JSON.stringify(loginForm),
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   }).then((res) => res.json());
 }
 
 export function putInit() {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/init`, {
+  return request(`${apiPrefix}api/admin/init`, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
 }
 
 export function putRecover() {
-  const token = useStateStore().token;
-  return fetch(`${apiPrefix}api/admin/recover`, {
+  return request(`${apiPrefix}api/admin/recover`, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
 }

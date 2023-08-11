@@ -118,7 +118,7 @@ watchEffect(() => (titleStore.subtitle = String(route.meta.title)));
           <a
             href="/"
             target="_blank"
-            class="flex flex-row items-center h-full px-2 sm:px-4 hover:bg-white-mask"
+            class="flex flex-row items-center h-full px-2 sm:px-4 hover:bg-white-mask hover:text-primary"
           >
             <i class="bi bi-link mr-2"></i>
             主页

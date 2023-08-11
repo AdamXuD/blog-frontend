@@ -1,10 +1,11 @@
 import type { Article, Attachment, Metadata } from "@/types";
+import { fetchWrapper } from "@/utils";
 
 const publicPrefix: string = import.meta.env.VITE_BLOG_PUBLIC_PREFIX;
 
 function getData(filepath: string): Promise<unknown> {
-  return fetch(`${publicPrefix}${filepath}?t=${Date.now()}`)
-    .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+  return fetchWrapper(`${publicPrefix}${filepath}?t=${Date.now()}`)
+    .then((res) => res.json())
     .catch((err) => {
       console.error("数据文件加载失败:", err);
       return Promise.reject(err);
